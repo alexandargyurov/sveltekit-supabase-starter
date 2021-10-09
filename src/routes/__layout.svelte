@@ -59,8 +59,8 @@
         {#if currentUser}
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-primary" href="/account?signup">
-                <strong>Welcome back, {currentUser.id}</strong>
+              <a class="button is-primary" href="/account">
+                <strong>Welcome back, {currentUser.metadata.username}</strong>
               </a>
             </div>
           </div>

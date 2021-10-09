@@ -1,8 +1,23 @@
+import supabase from '$lib/utils/db';
+import type { User } from '@supabase/supabase-js';
 import type { GetSession, Handle } from '@sveltejs/kit';
-import supabase from '$lib/db';
+import * as cookie from 'cookie';
+
+async function getUserByCookie(req: any): Promise<{ user: User | null; data: User | null; error: Error | null }> {
+  const { access_token } = cookie.parse(req.headers.cookie || '');
+
+  try {
+    if (!access_token) throw new Error('No cookie found!');
+    const { user, error } = await supabase.auth.api.getUser(access_token);
+    if (error) throw error;
+    return { user, data: user, error: null };
+  } catch (error) {
+    return { user: null, data: null, error };
+  }
+}
 
 export const handle: Handle = async ({ request, resolve }) => {
-  const currentUser = await supabase.auth.api.getUserByCookie(request);
+  const currentUser = await getUserByCookie(request);
 
   if (currentUser) {
     request.locals.user = currentUser.user;
@@ -26,7 +41,7 @@ export const getSession: GetSession = (request) => {
           // exclude anything else attached to the user
           // like access tokens etc
           id: request.locals.user.id,
-          name: request.locals.user.user_metadata,
+          metadata: request.locals.user.user_metadata,
           email: request.locals.user.email,
           role: request.locals.user.role
         }
