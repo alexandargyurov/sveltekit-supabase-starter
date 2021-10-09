@@ -1,45 +1,64 @@
 <script lang="ts">
-  import Header from '$lib/header/Header.svelte';
-  import '../app.css';
+  import '../app.scss';
 </script>
 
-<Header />
+<svelte:head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<main>
-  <slot />
-</main>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- <link rel="manifest" href="/my.webmanifest" /> -->
 
-<footer>
-  <p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-</footer>
+  <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#FFF" media="(prefers-color-scheme: light)" />
+</svelte:head>
 
-<style>
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    width: 100%;
-    max-width: 1024px;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
+<header>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <!-- navbar items, navbar burger... -->
+      <a class="navbar-item" href="/">
+        <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="logo" />
+      </a>
 
-  footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-  }
+      <a href="/" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </a>
+    </div>
 
-  footer a {
-    font-weight: bold;
-  }
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/"> Home </a>
 
-  @media (min-width: 480px) {
-    footer {
-      padding: 40px 0;
-    }
-  }
-</style>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="/"> More </a>
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="/"> About </a>
+            <a class="navbar-item" href="/"> Jobs </a>
+            <a class="navbar-item" href="/"> Contact </a>
+            <hr class="navbar-divider" />
+            <a class="navbar-item" href="/"> Report an issue </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary" href="/account?signup">
+              <strong>Sign up</strong>
+            </a>
+            <a class="button is-light" href="/account?login"> Log in </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<slot />
