@@ -1,10 +1,12 @@
-import cookie from 'cookie';
-import { v4 as uuid } from '@lukeed/uuid';
-import type { Handle } from '@sveltejs/kit';
+import type { GetSession, Handle } from '@sveltejs/kit';
+import supabase from '$lib/db';
 
 export const handle: Handle = async ({ request, resolve }) => {
-  const cookies = cookie.parse(request.headers.cookie || '');
-  request.locals.userid = cookies.userid || uuid();
+  const currentUser = await supabase.auth.api.getUserByCookie(request);
+
+  if (currentUser) {
+    request.locals.user = currentUser.user;
+  }
 
   // TODO https://github.com/sveltejs/kit/issues/1046
   if (request.query.has('_method')) {
@@ -13,14 +15,21 @@ export const handle: Handle = async ({ request, resolve }) => {
 
   const response = await resolve(request);
 
-  if (!cookies.userid) {
-    // if this is the first time the user has visited this app,
-    // set a cookie so that we recognise them when they return
-    response.headers['set-cookie'] = cookie.serialize('userid', request.locals.userid, {
-      path: '/',
-      httpOnly: true
-    });
-  }
-
   return response;
+};
+
+export const getSession: GetSession = (request) => {
+  return request.locals.user
+    ? {
+        user: {
+          // only include properties needed client-side —
+          // exclude anything else attached to the user
+          // like access tokens etc
+          id: request.locals.user.id,
+          name: request.locals.user.user_metadata,
+          email: request.locals.user.email,
+          role: request.locals.user.role
+        }
+      }
+    : {};
 };

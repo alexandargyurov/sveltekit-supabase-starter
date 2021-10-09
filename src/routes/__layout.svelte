@@ -1,5 +1,11 @@
 <script lang="ts">
+  import { setContext } from 'svelte';
+
+  import { session } from '$app/stores';
+
   import '../app.scss';
+
+  const currentUser = $session.user;
 </script>
 
 <svelte:head>
@@ -13,6 +19,8 @@
 
   <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#FFF" media="(prefers-color-scheme: light)" />
+
+  <script src="https://kit.fontawesome.com/2ef45ba4a5.js" crossorigin="anonymous"></script>
 </svelte:head>
 
 <header>
@@ -48,14 +56,24 @@
       </div>
 
       <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-primary" href="/account?signup">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light" href="/account?login"> Log in </a>
+        {#if currentUser}
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/account?signup">
+                <strong>Welcome back, {currentUser.id}</strong>
+              </a>
+            </div>
           </div>
-        </div>
+        {:else}
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/account/signup">
+                <strong>Sign up</strong>
+              </a>
+              <a class="button is-light" href="/account/login"> Log in </a>
+            </div>
+          </div>
+        {/if}
       </div>
     </div>
   </nav>
