@@ -1,7 +1,8 @@
 <script context="module">
   import { browser, dev } from '$app/env';
-  import { page } from '$app/stores';
   import Meta from '$lib/Meta.svelte';
+
+  import './account.scss';
 
   // we don't need any JS on this page, though we'll load
   // it in dev so that we get hot module replacement...
@@ -38,11 +39,3 @@
     The <a href="/todos">TODOs</a> page illustrates SvelteKit's data loading and form handling. Try using it with JavaScript disabled!
   </p>
 </div>
-
-<style>
-  .content {
-    width: 100%;
-    max-width: var(--column-width);
-    margin: var(--column-margin-top) auto 0 auto;
-  }
-</style>
